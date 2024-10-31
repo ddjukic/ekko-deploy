@@ -1,0 +1,14 @@
+streamlit
+langchain
+langchain-community
+langchain-openai
+chromadb
+tiktoken
+readtime
+pyyaml
+feedparser
+requests
+pandas
+openai
+supabase
+protobuf==3.20.3
