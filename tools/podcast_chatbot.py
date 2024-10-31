@@ -13,37 +13,24 @@ from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 
 
 class ChatBotInterface:
-    def __init__(self, transcript_path, model='gpt-4o', credentials_path="./creds/openai_credentials.json"):
+    def __init__(self, transcript_path, model='gpt-4o'):
         """
         Initializes the chat bot interface with necessary paths and model.
 
-        :param credentials_path: str
-            Path to the JSON file containing the OpenAI API key.
         :param transcript_path: str
             Path to the text file containing the transcripts.
         :param model: str, optional
             The model identifier for the OpenAI API (default is 'gpt-3.5-turbo-0125').
         """
-        self.credentials_path = credentials_path
         self.transcript_path = transcript_path
-        self.api_key = self.load_api_key()
-        self.model = ChatOpenAI(model_name=model, temperature=0, 
-                                openai_api_key=self.api_key,
-                                )
+        self.model = ChatOpenAI(
+            model_name=model, 
+            temperature=0,
+            openai_api_key=st.secrets["openai"]["api_key"]
+        )
         self.vectordb = self.setup_vector_db()
         self.qa_chain = self.setup_qa_chain()
 
-    def load_api_key(self):
-        """
-        Load the OpenAI API key from a JSON file.
-
-        :return: str
-            The OpenAI API key.
-        """
-        with open(self.credentials_path, 'r') as file:
-            credentials = json.load(file)
-            return credentials['api_key']
-        
     def load_and_split_transcript(self):
         """
         Loads and splits the transcript into manageable chunks.
@@ -71,7 +58,7 @@ class ChatBotInterface:
             os.makedirs(persist_directory)
 
         documents = self.load_and_split_transcript()
-        embeddings = OpenAIEmbeddings(openai_api_key=self.api_key)
+        embeddings = OpenAIEmbeddings(openai_api_key=st.secrets["openai"]["api_key"])
         vectordb = Chroma.from_documents(documents=documents, embedding=embeddings, persist_directory=persist_directory)
         
         return vectordb

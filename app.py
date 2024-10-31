@@ -21,7 +21,7 @@ class Episode:
 
 # Initialize clients
 supabase = SupabaseClient()
-FEED_URL = "https://feeds.buzzsprout.com/763010.rss"
+FEED_URL = st.secrets["podcast"]["feed_url"]
 
 @st.cache_data
 def get_episodes():

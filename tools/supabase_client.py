@@ -1,9 +1,10 @@
 from supabase import create_client
+import streamlit as st
 
 class SupabaseClient:
     def __init__(self):
-        self.url = "https://dghhrqddbfhywygofeqm.supabase.co"
-        self.key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRnaGhycWRkYmZoeXd5Z29mZXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAzNzQ2NTgsImV4cCI6MjA0NTk1MDY1OH0.OKBuEZB-CSDwp83yiE3FWYD0EdjmHvdS4jSR1KnyRho"
+        self.url = st.secrets["supabase"]["url"]
+        self.key = st.secrets["supabase"]["key"]
         self.client = create_client(self.url, self.key)
 
     def upload_transcript(self, episode_title: str, transcript_text: str, metadata: dict):

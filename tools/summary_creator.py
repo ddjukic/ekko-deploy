@@ -8,18 +8,16 @@ import json
 class TranscriptSummarizer:
     """Summarizes podcast transcripts using the OpenAI API."""
 
-    def __init__(self, model="gpt-4o", system_file_path="system.md", credentials_file_path="./ekko/ekko_prototype/creds/openai_credentials.json"):
+    def __init__(self, model="gpt-4o", system_file_path="system.md"):
         """Initialize the summarizer with the specified model, system file, and credentials file.
 
         Args:
             model (str): The model to use for the OpenAI API.
             system_file_path (str): The path to the system context file.
-            credentials_file_path (str): The path to the JSON file containing the OpenAI API key.
         """
         self.model = model
         self.system_content = self._load_system_content(system_file_path)
-        self.api_key = self._load_api_key(credentials_file_path)
-        self.client = OpenAI(api_key=self.api_key)
+        self.client = OpenAI(api_key=st.secrets["openai"]["api_key"])
 
     def _load_system_content(self, file_path):
         """Load the system context from a markdown file.
@@ -32,19 +30,6 @@ class TranscriptSummarizer:
         """
         with open(file_path, 'r', encoding='utf-8') as file:
             return file.read()
-
-    def _load_api_key(self, file_path):
-        """Load the OpenAI API key from a JSON file.
-
-        Args:
-            file_path (str): The path to the JSON file containing the OpenAI API key.
-
-        Returns:
-            str: The OpenAI API key.
-        """
-        with open(file_path, 'r') as file:
-            credentials = json.load(file)
-            return credentials['api_key']
 
     def summarize_transcript(self, transcript):
         """Summarize the provided transcript using the OpenAI API.
