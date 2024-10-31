@@ -2,7 +2,7 @@ streamlit
 langchain
 langchain-community
 langchain-openai
-chromadb
+chromadb==0.3.29
 tiktoken
 readtime
 pyyaml
